@@ -104,6 +104,26 @@ database/
 📄 License
 MIT — Free to use for personal and commercial projects.
 
+## 📦 Redis Setup & Testing
+
+This project uses Redis for:
+- ⚡ API caching
+- 📬 Queued jobs (emails, notifications)
+- 🔑 Session management (optional)
+
+---
+
+### 🔥 Test Redis (via Docker)
+
+To connect to the Redis container:
+
+```bash
+# Using Docker Compose (v2 syntax)
+docker compose exec redis redis-cli
+
+# OR with Laravel Sail
+./vendor/bin/sail exec redis redis-cli
+
 👨‍💻 Maintainer
 Pratanu Khajanchi
 Senior Backend Engineer
