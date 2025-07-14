@@ -4,30 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    protected AuthService $authService;
     public function register(Request $request)
     {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        // Assign a default tenant (for now)
-        $tenant = \App\Models\Tenant::where('slug', $request->tenant_slug)->firstOrFail();
-        $user = User::create([
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-            'tenant_id' => $tenant->id, // Assign tenant_id here
-        ]);
-
-        // Optionally assign a default role
-        $user->assignRole('user');
+        $user = $this->authService->register($request->all());
 
         return response()->json([
             'message' => 'User registered successfully',
