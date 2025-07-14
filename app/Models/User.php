@@ -15,4 +15,10 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
 }

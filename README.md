@@ -14,6 +14,7 @@ A modern, scalable SaaS boilerplate built on **Laravel 12**, powered by **Docker
 - **Database**: MySQL (via Docker)
 - **Cache/Queue**: Redis
 - **Permissions**: Spatie Laravel Permission (RBAC)
+- **Multi-Tenancy**: Scoped via `tenant_id`
 - **Containers**: Docker + Laravel Sail
 - **CI/CD**: GitHub Actions (coming soon)
 - **Frontend**: Laravel Blade (clean admin scaffolding)
@@ -37,10 +38,8 @@ cd laravel-saas-boilerplate
 cp .env.example .env
 ./vendor/bin/sail up -d
 ./vendor/bin/sail artisan key:generate
-./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan migrate --seed
 ./vendor/bin/sail artisan passport:install
-
-
 Visit the app at: http://localhost
 
 🔐 Authentication
@@ -50,20 +49,28 @@ POST /oauth/token for access token
 
 Supports: Password Grant, Client Credentials
 
-Token scopes and guards can be extended
+Token scopes and guards extendable
 
-Sample AuthController coming soon
+Includes sample AuthController for:
 
-🧱 Features (Planned & In Progress)
+Register (/api/register)
+
+Login (/api/login)
+
+Get user (/api/me)
+
+Logout (/api/logout)
+
+🧱 Features
 ✅ Dockerized Laravel 12 Setup
 
 ✅ MySQL & Redis via Sail
 
 ✅ OAuth2 Authentication (Passport)
 
- Multi-tenancy via tenant_id scoped models
+✅ Multi-tenancy via tenant_id scoped models
 
- RBAC using Spatie Permissions
+✅ RBAC using Spatie Permissions
 
  Modular Services (User, Tenant, Billing)
 
@@ -80,20 +87,20 @@ Edit
 ./vendor/bin/sail test
 (PHPUnit configured — Pest optional)
 
-📂 Folder Structure (Soon)
-Copy
-Edit
+📂 Folder Structure
+
 app/
 ├── Http/
-├── Models/
-├── Services/
-├── Repositories/
-├── Traits/
+│   └── Controllers/Api/AuthController.php
+├── Models/User.php
+├── Models/Tenant.php
+├── Traits/BelongsToTenant.php
 routes/
 ├── api.php
 ├── web.php
-
-
+database/
+├── seeders/RoleSeeder.php
+├── seeders/TenantSeeder.php
 📄 License
 MIT — Free to use for personal and commercial projects.
 
@@ -103,28 +110,15 @@ Senior Backend Engineer
 💼 PHP | Laravel | Golang | Kafka | Microservices
 🌍 PropTech | EdTech | InsurTech | Real-time Systems
 
+
 ⭐ If you find this useful, give it a star!
 💬 Feel free to fork, contribute, or connect with me.
 
-
 ---
 
-### ✅ Optional GitHub Setup
-
-While editing your GitHub repo:
-
-- 📌 **Description**:  
-  > A scalable, production-ready SaaS boilerplate in Laravel 12 with OAuth2, Docker, MySQL, Redis, and RBAC.
-
-- 🏷️ **Topics**:  
-  `laravel`, `saas`, `docker`, `oauth2`, `mysql`, `passport`, `rbac`, `backend`, `portfolio`, `starter-kit`
-
----
-
-Let me know when you're ready — I'll start writing:
-- `AuthController` (register, login)
-- Spatie permissions seeder
-- Modular structure
-- GitHub Actions CI file
-
-All production-grade and optimized for your portfolio.
+## ✨ What Changed
+✅ Added **Multi-tenancy** details  
+✅ Mentioned **Role-Based Access Control** (RBAC)  
+✅ Updated folder structure to reflect new models/seeders  
+✅ Added `/api` routes and `AuthController` usage  
+✅ Updated migrate step to `--seed`  

@@ -11,14 +11,30 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
-        return response()->json($user);
+        // Assign a default tenant (for now)
+        $tenant = \App\Models\Tenant::where('slug', $request->tenant_slug)->firstOrFail();
+        $user = User::create([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => Hash::make($request->password),
+            'tenant_id' => $tenant->id, // Assign tenant_id here
+        ]);
+
+        // Optionally assign a default role
+        $user->assignRole('user');
+
+        return response()->json([
+            'message' => 'User registered successfully',
+            'user'    => $user
+        ], 201);
     }
+
 
     public function login(Request $request)
     {
